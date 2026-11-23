@@ -135,7 +135,13 @@ fn headers(f: &mut Formatter, scan: &Scan) -> fmt::Result {
         writeln!(f, "  0x20 unknown  {} {}", x20[0], x20[1])?;
         writeln!(f, "  0x24 files    {}", header.files)?;
         writeln!(f, "  0x28 unknown  {x28:#010x}")?;
-        writeln!(f, "  0x2c unknown  {:#06x} {}", x2c[0], x2c[1])?;
+        writeln!(
+            f,
+            "  0x2c selector {:#06x}  (stride {}{})",
+            x2c[0],
+            header.stride(),
+            if header.toc_matches() { "" } else { ", region does not match" }
+        )?;
         writeln!(f, "  body          {}", hex(&archive.body))?;
         writeln!(f, "  trailer       {}", hex(&archive.trailer))?;
     }
